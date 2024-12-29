@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+
+<html lang="it"> <!--lingua ita-->
+
+
+
+<head>
+
+
+  <meta charset="UTF-8"> <!--caratteri utilizzati-->
+
+  <title>Pong - 2Dsa</title>
+
+
+
+  <style type="text/css"> <!--css-->
+
+        body{
+        height: 100%;
+        }
+
+
+        body{
+        background: black;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        }
+
+
+        .frame { /*set massima larghezza e altezza canvas (auto-resize)*/
+        
+        max-width: 640px;
+        max-height: 480px;
+        width: 50%;
+        height: 100%;
+        }
+
+
+        canvas {
+        outline: 1px solid white;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        }
+
+  </style>
+
+
+
+
+
+  <script>
+
+        //set elementi canvas
+        canvas=document.getElementById('canvas').getContext('2d')
+        canvas.fillStyle="#FFF"
+        canvas.font="25px monospace"
+
+        w=s=1 //set pausa e inizio a 1
+
+        p=q=0 //set velocità racchette a 0
+
+        a=b=0 //set punteggio a 0
+
+        m=n=190 //set posizione iniziale racchette
+
+        x=300; y=235 //set posizione iniziale palla
+
+        u=-5; v=3 //set velocità palla
+
+
+
+
+
+        setInterval(function(){
+
+
+
+        if(w&&!s){    //se è in pausa, il gioco non inizia
+            return;
+            s=0
+        }
+
+
+
+        canvas.clearRect(0, 0, 640, 480)  //inizializzo canvas
+
+        for(i=5; i<480; i+=20){  //disegna rettangoli linea tratteggitata
+            canvas.fillRect(318, i, 4, 10)
+        }
+
+
+
+
+        m+=p; n+=q  //assegno velocità a racchetta (x, y)
+
+        m=m<0?0:m; m=m>380?380:m  //imposta limite posizione racchetta sx
+
+        n=n<0?0:n; n=n>380?380:n  //imposta limite posizione racchetta dx
+
+        x+=u; y+=v  //assegno velocità a palla (x, y)
+
+
+
+
+        if(y<=0){  //rimbalzo parete inferiore
+        y=0;
+        v=-v
+        }
+
+        if(y>=470){  //rimbalzo parete superiore
+        y=470;
+        v=-v
+        }
+
+
+
+
+        if(x<=40 && x>=20 && y<m+110 && y>m-10){  //rimbalzo su racchetta sx
+        u=-u+0.2;
+        v+=(y-m-45)/20
+        }
+
+        if(x<=610 && x>=590 && y<n+110 && y>n-10){  //rimbalzo su racchetta dx
+        u=-u-0.2;
+        v+=(y-n-45)/20
+        }
+
+
+
+
+        if(x<-10){  //uscita palla parete sx (punti player dx e restart)
+        b++;
+        x=360;
+        y=235;
+        u=5;
+        w=1
+        }
+
+        if(x>640){ //uscita palla parete dx (punti player sx e restart)
+        a++;
+        x=280;
+        y=235;
+        u=-5;
+        w=1
+        }
+
+
+        canvas.fillText(n1+" "+"("+a+")",60,60)  //scrivo nome e punteggio player 1
+        canvas.fillText(n2+" "+"("+b+")",380,60)  //scrivo nome e punteggio player 2
+
+
+
+
+        canvas.fillRect(20,m,20,100)  //disegno racchetta sinistra
+
+        canvas.fillRect(600,n,20,100)  //disegno racchetta destra
+
+
+        canvas.fillRect(x,y,10,10)},30)  //disegno palla
+
+
+
+
+        document.onkeydown=function(e){  //set tasti racchette (premuti)
+        k=(e||window.event).keyCode;
+
+        w=w?0:k=='39'?1:0;
+
+        p=k=='83'?5:k=='87'?-5:p;
+        q=k=='40'?5:k=='38'?-5:q;
+        }
+
+
+        document.onkeyup=function(e){  //set tasti racchette (rilasciati)
+        k=(e||window.event).keyCode;
+
+        p=k=='83'||k=='87'?0:p;
+        q=k=='38'||k=='40'?0:q
+        }
+
+
+
+
+
+        /* Indice Variabili:
+
+        a -> punteggio giocatore sinistro
+        b -> punteggio giocatore destro
+
+        c -> context
+        e -> evento
+        i -> contatore linea tratteggiata
+
+        k -> keycode
+
+        m -> posizione racchetta sinistra y
+        n -> posizione racchetta destra y
+
+        p -> velocità racchetta sinistra y
+        q -> velocità racchetta destra y
+
+        s -> inizio gioco
+
+        u -> velocità palla x
+        v -> velocità palla y
+
+        w -> pausa
+
+        x -> posizione palla x
+        y -> posizione palla y
+
+        */
+
+  </script>
+
+
+
+
+
+
+</head>
+
+
+
+
+    <body>
+
+
+
+      <script>
+
+
+       var n1, n2
+
+       n1 = prompt("Nome 1° giocatore", "Player 1");
+       n2 = prompt("Nome 2° giocatore", "Player 2");
+
+       if(n1 == null) n1 = "Player 1"
+       if(n2 == null) n2 = "Player 2"
+
+       alert("Premi ok per iniziare la partita. Buon divertimento! ")
+
+
+
+
+      </script>
+
+
+
+
+
+      <div class="frame"> <!-- sezione-->
+        <canvas id="canvas" width="640" height="480" style="background:#000"></canvas> <!--campo di gioco-->
+      </div>
+
+      <script src="./script.js"></script>  <!--link javascrpt-->
+
+      
+
+    </body>
+
+
+
+</html>
